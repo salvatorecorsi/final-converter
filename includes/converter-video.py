@@ -15,7 +15,7 @@ def get_options(question_mapping):
 
 def convert_video(input_path, output_format, options=None):
     try:
-        output_path = ".".join(input_path.split(".")[:-1]) + f".{output_format}"
+        output_path = os.path.splitext(input_path)[0] + f".{output_format}"
         ffmpeg.input(input_path).output(output_path, **(options or {})).run(overwrite_output=True)
     except ffmpeg.Error as e:
         print(f"Errore durante la conversione video: {str(e)}")

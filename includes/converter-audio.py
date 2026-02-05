@@ -12,16 +12,25 @@ def get_options(question_mapping):
 	return options
 
 def convert_audio(input_path, output_format, options=None):
-	output_path = ".".join(input_path.split(".")[:-1]) + f".{output_format}"
-	ffmpeg.input(input_path).output(output_path, **(options or {})).run(overwrite_output=True)
+	try:
+		output_path = os.path.splitext(input_path)[0] + f".{output_format}"
+		ffmpeg.input(input_path).output(output_path, **(options or {})).run(overwrite_output=True)
+	except ffmpeg.Error as e:
+		print(f"Error during audio conversion: {str(e)}")
+		sys.exit(1)
 
 def main():
 	if len(sys.argv) < 3:
 		sys.exit(1)
 
 	input_path = sys.argv[1]
-	output_format = sys.argv[2]
+	output_format = sys.argv[2].lower()
 	use_options = len(sys.argv) >= 4 and sys.argv[3].lower() == 'true'
+
+	if output_format not in supported_formats:
+		print(f"Unsupported output format: {output_format}")
+		print(f"Supported formats: {', '.join(supported_formats)}")
+		sys.exit(1)
 
 	format_options = {
 		'mp3': {

@@ -10,15 +10,15 @@ python_path = current_path + r"\Python311\python.exe" if os.path.exists(current_
 supported_formats = {
     "audio": ["mp3", "wav", "aiff", "ogg"],
     "video": ["mp4", "avi", "mkv"],
-    "image": ["jpg", "png", "gif", "txt"],
+    "image": ["jpg", "png", "gif"],
     "document": ["pdf", "txt"]
 }
 
 # Mapping from format to subscript
 subscripts = {
-    "audio": "includes/audio_converter.py",
-    "video": "includes/video_converter.py",
-    "image": "includes/image_converter.py"
+    "audio": "includes/converter-audio.py",
+    "video": "includes/converter-video.py",
+    "image": "includes/converter-image.py"
 }
 
 def get_file_type(extension):
@@ -40,7 +40,8 @@ def main():
     output_format = sys.argv[2]
     use_options = len(sys.argv) >= 4 and sys.argv[3].lower() == 'true'
 
-    input_extension = input_path.split(".")[-1]
+    _, input_extension = os.path.splitext(input_path)
+    input_extension = input_extension.lstrip(".").lower()
     file_type = get_file_type(input_extension)
 
     if not file_type:
