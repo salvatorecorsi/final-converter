@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 
+
 # get current abs path folder
 current_path = os.path.dirname(os.path.abspath(__file__))
 python_path = current_path + r"\Python311\python.exe" if os.path.exists(current_path + r"\Python311\python.exe") else "python"
